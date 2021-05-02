@@ -192,7 +192,7 @@ server.get('/register', (req, res) => {
 })
 server.post("/register", uploadCloud.single('IDcard'), function (req, res) {
     console.log('filename: ' + req.file.filename)
-    user.register(new user({ name: req.body.name, username: req.body.username, idcard: req.file.filename, email: req.body.email, address: req.body.address, phone: req.body.phone, coin: 0, accessToken: null, isbaned: "no", month: req.body.month, year: req.body.year, piece_available: 4 }), req.body.password, function (error, user) {
+    user.register(new user({ name: req.body.name, username: req.body.username, idcard: req.file.path, email: req.body.email, address: req.body.address, phone: req.body.phone, coin: 0, accessToken: null, isbaned: "no", month: req.body.month, year: req.body.year, piece_available: 4 }), req.body.password, function (error, user) {
         if (error) {
             console.log("error: " + error);
             res.send(error)
