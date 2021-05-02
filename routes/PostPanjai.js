@@ -30,16 +30,15 @@ const uploadCloud = multer({ storage: storage });
 
 router.get('/', (req, res) => {
     PostPanjai.find({}, (err, docs) => {
-        if (!err)
+        if (!err){
             res.send(docs)
+        }
         else
             console.log('Error #1 : ' + JSON.stringify(err, undefined, 2))
     })
 })
 
 router.post('/', uploadCloud.array('image'), (req, res) => {
-
-    console.log('***')
 
     const urls = []
     req.files.forEach(file => urls.push(file.path))
@@ -52,16 +51,18 @@ router.post('/', uploadCloud.array('image'), (req, res) => {
         image: urls,
         creator: req.body.creator
     })
-    console.log(newRecord)
     newRecord.save((err, docs) => {
         if (!err)
+    {console.log("ready")
             res.send(docs)
+    }
         else
             console.log('Error #2 : ' + JSON.stringify(err, undefined, 2))
     })
 })
 
 router.put('/:id', (req, res) => {
+
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('No record with given id : ' + req.params.id)
 
@@ -81,6 +82,7 @@ router.put('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
+    console.log('**')
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('No #4 : ' + req.params.id)
 
