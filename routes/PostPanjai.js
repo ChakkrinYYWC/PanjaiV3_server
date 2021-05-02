@@ -28,7 +28,7 @@ const storage = new CloudinaryStorage({
 
 const uploadCloud = multer({ storage: storage });
 
-router.get('/test', (req, res) => {
+router.get('/', (req, res) => {
     console.log('*')
     PostPanjai.find({}, (err, docs) => {
         if (!err){
