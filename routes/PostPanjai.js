@@ -95,8 +95,8 @@ router.delete('/:id', (req, res) => {
 })
 
 router.post('/addFav/:id', (req, res) => {
-    console.log("Post_id: " + req.params.id)
-    console.log("currentuser_id: " + req.body.currentUser_id)
+    //console.log("Post_id: " + req.params.id)
+    //console.log("currentuser_id: " + req.body.currentUser_id)
 
     user.findByIdAndUpdate(req.body.currentUser_id, { $addToSet: { favorite: req.params.id } }, function (error, update) {
         if (error) {
@@ -108,72 +108,36 @@ router.post('/addFav/:id', (req, res) => {
 })
 
 router.post('/unfav/:id', async (req, res) => {
-
-    // console.log("User_id: " + req.params.id)
-    // console.log(typeof(req.body.prepair_id))
-    // var arr=[]
-    // req.body.prepair_id.forEach(old_id =>{
-        
-    // })
-
-
-    // user.findByIdAndUpdate(req.params.id, { $set: { favorite: req.body.prepair_id } }, function (error, update) {
-    //     if (error) {
-    //         console.log(error)
-    //     } else {
-    //         res.send(update)
-    //     }
-    // })
-    // for (let i = 1; i < req.body.prepair_id.length; i++) {
-    //     user.findByIdAndUpdate(req.params.id, { $addToSet: { favorite: req.body.prepair_id[i] } }, function (error, update) {
-    //         if (error) {
-    //             console.log(error)
-    //         } else {
-    //             res.send(update)
-    //         }
-    //     })
-    // }
-
-    // let user_data = await user.aggregate([
-    //     {
-    //         $match: {
-    //             _id: mongoose.Types.ObjectId(req.params.id)
-    //         }
-    //     },
-    //     {
-    //         $unwind: "$favorite"
-    //     },
-    // ])
-    // console.log(typeof(arr))
-
-    // user.update({id: req.params.id}, { $set: { favorite: [] }}, function(err, affected){
-    //     console.log('affected: ', affected);
-    // });
-
-    // console.log(user_data.length)
-    // // for (let i = 0; i < user_data.length.length; i++) {
-    // //     user.update({ id: req.params.id }, { $pop: { favorite: 1 } }, (err, docs) => {
-    // //         if (!err) {
-    // //             console.log('**')
-    // //         }
-    // //         else
-    // //             console.log('Error : ' + JSON.stringify(err, undefined, 2))
-    // //     })
-        
-    // // }
+    let user_data = await user.aggregate([
+        {
+            $match: {
+                _id: mongoose.Types.ObjectId(req.params.id)
+            }
+        },
+        {
+            $unwind: "$favorite"
+        },
+    ])
+    for (let index = 0; index <= user_data.length; index++) {
+        await user.updateOne({ _id: req.params.id }, { $pop: { favorite: 1 } }, function(err,result){
+            if (err) {
+              console.log(err)
+            }
+        });
+    }
+    for (let index = 0; index <= req.body.prepair_id.length; index++) {
+        await user.findByIdAndUpdate(req.params.id, { $addToSet: { favorite: req.body.prepair_id[index] } }, function (error, update) {
+            if (error) {
+                console.log(error)
+            }
+        })
+    }
+    res.sendStatus(200)
 })
 
 router.post('/addRequest/:id', async function (req, res) {
     console.log("Post_id: " + req.params.id)
     console.log("currentuser_id: " + req.body.currentUser_id)
-
-    // const Post = PostPanjai.findById(req.params.id,await function(error,done){
-    //     if(error){
-    //         console.log(error)
-    //     }else{
-    //         //console.log(done)
-    //     }
-    // })
     let post = await PostPanjai.aggregate([
         {
             $match: {
@@ -255,15 +219,6 @@ router.post('/recieveAccept', async function (req, res) {
             owner_contact: owner[0].phone,
             item: req.body.item,
         })
-        //recieve.index({ "createdAt": 1 }, { expireAfterSeconds: 10 })
-        //recieve.createIndex({ "createdAt": 1 }, { expireAfterSeconds: 10 })
-        // db.log_events.createIndex( { "expireAt": 1 }, { expireAfterSeconds: 0 } )
-        // db.log_events.insert( {
-        //     "createdAt": new Date(), 
-        //     "logEvent": 2, 
-        //     "logMessage": "Success!"
-        // } )
-        // db.log_events.createIndex( { "createdAt": 1 }, { expireAfterSeconds: 3600 } )
         user.findByIdAndUpdate(requester[0]._id, { piece_available: requester[0].piece_available - 1 }, await function (error, update) {
             if (error) {
                 console.log(error)
@@ -293,15 +248,12 @@ router.post('/recieveAccept', async function (req, res) {
         dashboard.findByIdAndUpdate(find[0]._id, { number: find[0].number + 1 }, (err, docs) => {
             if (err) {
                 console.log(err)
-                //res.send(docs)
             }
         })
         res.sendStatus(200)
     } else {
         res.send(req.body.sendTo + " was out of quota limit")
     }
-    //console.log(owner_id)
-    // recieve.createIndex( { "createdAt": 1 }, { expireAfterSeconds: 3600 } )
 
     noti.findByIdAndDelete(req.body.notiId, function (error, remove) {
         if (error) {
