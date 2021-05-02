@@ -23,14 +23,7 @@ const e = require("express");
 
 /*-------------------------------------------------------------------------------*/
 server.post('/favorite/:user',async function(req, res){
-    console.log("User: " + req.params.user)
-    // const result = await user.findById(req.params.user, function(error,done){
-    //     if (error) {
-    //         console.log(error)
-    //     } else {
-    //         console.log(done)
-    //     }
-    // })
+    //console.log("User: " + req.params.user)
     let result = await user.aggregate([
         {
             $match: {
@@ -47,27 +40,9 @@ server.post('/favorite/:user',async function(req, res){
             }
         },
     ])
-    console.log(result[0].favorite)
+    //console.log(result[0].favorite)
     res.send(result[0].favorite)
 })
-
-server.post('/update/:id', function (req, res) {
-
-    var updatedUser = {
-        phone: req.body[0],
-        address: req.body[1],
-        name: req.body[2],
-    }
-
-    user.findByIdAndUpdate(req.params.id, { $set: updatedUser }, { new: true }, function(error,update){
-        if(!error){
-            res.send(update)
-        }else{
-            console.log('Error #3 : '+error)
-        }
-    })
-
-});
 
 server.get('/', (req, res) => {
     console.log('*')
@@ -80,7 +55,6 @@ server.get('/', (req, res) => {
 })
 
 server.put('/:id', (req, res) => {
-
     var updatedRecord = {
         name: req.body.name,
         address: req.body.address,

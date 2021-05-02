@@ -105,6 +105,19 @@ router.post('/addFav/:id', (req, res) => {
     })
 })
 
+router.post('/unfav/:id', (req, res) => {
+
+    console.log("User_id: " + req.params.id)
+    console.log(req.body.fav)
+
+    // user.findByIdAndUpdate(req.params.id, { $addToSet: { favorite: req.body.fav }}, { new: true }, (err, docs) => {
+    //     if (!err)
+    //         res.send(docs)
+    //     else
+    //         console.log('Error : ' + JSON.stringify(err, undefined, 2))
+    // })
+})
+
 router.post('/addRequest/:id', async function (req, res) {
     console.log("Post_id: " + req.params.id)
     console.log("currentuser_id: " + req.body.currentUser_id)

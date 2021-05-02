@@ -34,8 +34,7 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/:id', (req, res) => {
-    
+router.get('/getid/:id', (req, res) => {
     PostFDT.findById(req.params.id,(err, docs) => {
         if (!err)
             res.send(docs)
@@ -79,10 +78,6 @@ router.post('/addFav/:id', (req, res) => {
 })
 
 router.post('/', uploadCloud.array('image'), async function (req, res) {
-    // console.log('******')
-    // console.log(req.body.category)
-    console.log('***')
-
     const urls = []
     req.files.forEach(file => urls.push(file.path))
 
@@ -91,7 +86,6 @@ router.post('/', uploadCloud.array('image'), async function (req, res) {
         title: req.body.title,
         message: req.body.message,
         n_item: req.body.n_item,
-        promptpay: req.body.promptpay,
         category: req.body.category,
         image: urls,
         endtime: req.body.endtime,
@@ -120,9 +114,6 @@ router.post('/', uploadCloud.array('image'), async function (req, res) {
 })
 
 router.put('/:id', (req, res) => {
-
-    console.log('***')
-    console.log(req.params.id)
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('No record with given id : ' + req.params.id)
 
@@ -131,7 +122,6 @@ router.put('/:id', (req, res) => {
         message: req.body.message,
         item: req.body.item,
         n_item: req.body.n_item,
-        promptpay: req.body.promptpay,
         endtime: req.body.endtime,
         address: req.body.address,
         phone: req.body.phone,
@@ -220,14 +210,5 @@ router.get('/FDTpopup/:word', async (req, res) => {
     res.send(result)
 })
 
-// router.get('/:id', (req, res) => {
-//     console.log(req.params.id)
-//     PostFDT.findById(req.params.id, (err, docs) => {
-//         if (!err)
-//             res.send(docs)
-//         else
-//             console.log('Error #6 : ' + JSON.stringify(err, undefined, 2))
-//     })
-// })
 
 module.exports = router
