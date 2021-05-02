@@ -29,11 +29,8 @@ const storage = new CloudinaryStorage({
 const uploadCloud = multer({ storage: storage });
 
 router.get('/', (req, res) => {
-    console.log('*')
     PostPanjai.find({}, (err, docs) => {
         if (!err){
-            console.log('******')
-            //console.log(docs)
             res.send(docs)
         }
         else
@@ -42,8 +39,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', uploadCloud.array('image'), (req, res) => {
-
-    console.log('***')
 
     const urls = []
     req.files.forEach(file => urls.push(file.path))
@@ -56,7 +51,6 @@ router.post('/', uploadCloud.array('image'), (req, res) => {
         image: urls,
         creator: req.body.creator
     })
-    // console.log(newRecord)
     newRecord.save((err, docs) => {
         if (!err)
     {console.log("ready")
@@ -68,6 +62,7 @@ router.post('/', uploadCloud.array('image'), (req, res) => {
 })
 
 router.put('/:id', (req, res) => {
+
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('No record with given id : ' + req.params.id)
 
@@ -87,6 +82,7 @@ router.put('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
+    console.log('**')
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('No #4 : ' + req.params.id)
 

@@ -34,8 +34,17 @@ router.get('/', (req, res) => {
     })
 })
 
+router.get('/:id', (req, res) => {
+    
+    PostFDT.findById(req.params.id,(err, docs) => {
+        if (!err)
+            res.send(docs)
+        else
+            console.log('Error #1 : ' + JSON.stringify(err, undefined, 2))
+    })
+})
+
 router.post('/background', async (req, res) => {
-    //console.log(req.body.data)
     let result = await background.aggregate([
         {
             $match: {
@@ -43,14 +52,7 @@ router.post('/background', async (req, res) => {
             }
         }
     ]);
-    //console.log(result)
     res.send(result[0])
-    // background.find((err, docs) => {
-    //     if (!err)
-    //         res.send(docs)
-    //     else
-    //         console.log('Error #1 : ' + JSON.stringify(err, undefined, 2))
-    // })
 })
 
 router.post('/map', async (req, res) => {
