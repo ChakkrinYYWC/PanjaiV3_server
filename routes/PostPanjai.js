@@ -30,7 +30,7 @@ const uploadCloud = multer({ storage: storage });
 
 router.get('/', (req, res) => {
     PostPanjai.find({}, (err, docs) => {
-        if (!err){
+        if (!err) {
             res.send(docs)
         }
         else
@@ -52,10 +52,10 @@ router.post('/', uploadCloud.array('image'), (req, res) => {
         creator: req.body.creator
     })
     newRecord.save((err, docs) => {
-        if (!err)
-    {console.log("ready")
+        if (!err) {
+            console.log("ready")
             res.send(docs)
-    }
+        }
         else
             console.log('Error #2 : ' + JSON.stringify(err, undefined, 2))
     })
@@ -101,21 +101,66 @@ router.post('/addFav/:id', (req, res) => {
     user.findByIdAndUpdate(req.body.currentUser_id, { $addToSet: { favorite: req.params.id } }, function (error, update) {
         if (error) {
             console.log(error)
+        } else {
+            res.send(update)
         }
     })
 })
 
-router.post('/unfav/:id', (req, res) => {
+router.post('/unfav/:id', async (req, res) => {
 
-    console.log("User_id: " + req.params.id)
-    console.log(req.body.fav)
-
-    // user.findByIdAndUpdate(req.params.id, { $addToSet: { favorite: req.body.fav }}, { new: true }, (err, docs) => {
-    //     if (!err)
-    //         res.send(docs)
-    //     else
-    //         console.log('Error : ' + JSON.stringify(err, undefined, 2))
+    // console.log("User_id: " + req.params.id)
+    // console.log(typeof(req.body.prepair_id))
+    // var arr=[]
+    // req.body.prepair_id.forEach(old_id =>{
+        
     // })
+
+
+    // user.findByIdAndUpdate(req.params.id, { $set: { favorite: req.body.prepair_id } }, function (error, update) {
+    //     if (error) {
+    //         console.log(error)
+    //     } else {
+    //         res.send(update)
+    //     }
+    // })
+    // for (let i = 1; i < req.body.prepair_id.length; i++) {
+    //     user.findByIdAndUpdate(req.params.id, { $addToSet: { favorite: req.body.prepair_id[i] } }, function (error, update) {
+    //         if (error) {
+    //             console.log(error)
+    //         } else {
+    //             res.send(update)
+    //         }
+    //     })
+    // }
+
+    // let user_data = await user.aggregate([
+    //     {
+    //         $match: {
+    //             _id: mongoose.Types.ObjectId(req.params.id)
+    //         }
+    //     },
+    //     {
+    //         $unwind: "$favorite"
+    //     },
+    // ])
+    // console.log(typeof(arr))
+
+    // user.update({id: req.params.id}, { $set: { favorite: [] }}, function(err, affected){
+    //     console.log('affected: ', affected);
+    // });
+
+    // console.log(user_data.length)
+    // // for (let i = 0; i < user_data.length.length; i++) {
+    // //     user.update({ id: req.params.id }, { $pop: { favorite: 1 } }, (err, docs) => {
+    // //         if (!err) {
+    // //             console.log('**')
+    // //         }
+    // //         else
+    // //             console.log('Error : ' + JSON.stringify(err, undefined, 2))
+    // //     })
+        
+    // // }
 })
 
 router.post('/addRequest/:id', async function (req, res) {
