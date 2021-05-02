@@ -29,9 +29,13 @@ const storage = new CloudinaryStorage({
 const uploadCloud = multer({ storage: storage });
 
 router.get('/', (req, res) => {
+    console.log('*')
     PostPanjai.find({}, (err, docs) => {
-        if (!err)
+        if (!err){
+            console.log('******')
+            //console.log(docs)
             res.send(docs)
+        }
         else
             console.log('Error #1 : ' + JSON.stringify(err, undefined, 2))
     })
@@ -52,10 +56,12 @@ router.post('/', uploadCloud.array('image'), (req, res) => {
         image: urls,
         creator: req.body.creator
     })
-    console.log(newRecord)
+    // console.log(newRecord)
     newRecord.save((err, docs) => {
         if (!err)
+    {console.log("ready")
             res.send(docs)
+    }
         else
             console.log('Error #2 : ' + JSON.stringify(err, undefined, 2))
     })
