@@ -152,40 +152,29 @@ router.delete('/:id', (req, res) => {
 
 router.post('/allItemInFDT', async function (req, res) {
     let result = await PostFDT.aggregate([
-        // {
-        //     $match: {
-        //         _id: mongoose.Types.ObjectId(req.body.data)
-        //     }
-        // }
+        {
+            $project: {
+                "item": 1
+            }
+        },
+        {
+            $unwind: "$item"
+        },
         {
             $group:
             {
-                "_id": "$item",
+                _id: "$item",
                 "count": { "$sum": 1 }
             }
         },
         {
-            $project: {
-                // "_id": 1,
-                // "title": 0,
-                // "message": 0,
-                // "item": 1,
-                // "n_item": 0,
-                // "promptpay": 0,
-                // "category": 0,
-                // "image": 0,
-                // "Timestamp": 0,
-                // "__v": 0,
-                // "name": 0,
-                // "endtime": 0,
-                // "map": 0,
-                // "lat": 0,
-                // "lng": 0,
-                "item": 1
+            $sort: {
+                "count": -1
             }
-        }
+        },
+        { $skip : 1 }
     ]);
-    //console.log(result)
+    console.log(result)
     res.send(result)
 })
 
