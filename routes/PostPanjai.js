@@ -40,6 +40,8 @@ router.get('/', (req, res) => {
 
 router.post('/', uploadCloud.array('image'), (req, res) => {
 
+    console.log('***')
+
     const urls = []
     req.files.forEach(file => urls.push(file.path))
 
@@ -82,7 +84,7 @@ router.put('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-    console.log('**')
+
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('No #4 : ' + req.params.id)
 
